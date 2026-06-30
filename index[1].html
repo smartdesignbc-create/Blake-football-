@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Smart Design Football — Precision Shooting Challenge</title>
+<meta name="description" content="A premium browser-based precision football shooting game. Swipe to score." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ SPLASH ============ -->
+  <section id="splash-screen" class="screen">
+    <div class="crest">⚽</div>
+    <div class="title-block">
+      <h1 class="title-main">SMART DESIGN<br/>FOOTBALL</h1>
+      <div class="title-sub">Precision Shooting Challenge</div>
+    </div>
+    <div class="loading-track"><div class="loading-fill"></div></div>
+  </section>
+
+  <!-- ============ MAIN MENU ============ -->
+  <section id="menu-screen" class="screen hidden">
+    <div class="eyebrow">Version 1.0</div>
+    <div class="title-block">
+      <h1 class="title-main" style="font-size:38px;">SMART DESIGN<br/>FOOTBALL</h1>
+    </div>
+    <div class="menu-stack">
+      <button class="btn btn-primary" data-nav="game" id="btn-play">Play</button>
+      <button class="btn btn-ghost" data-nav="how-to-play">How To Play</button>
+      <button class="btn btn-ghost" data-nav="high-scores">High Scores</button>
+      <button class="btn btn-ghost" data-nav="settings">Settings</button>
+      <button class="btn btn-ghost" data-nav="about">About</button>
+    </div>
+    <footer class="signoff">Blake BMC — Production Blueprint v1.0</footer>
+  </section>
+
+  <!-- ============ HOW TO PLAY ============ -->
+  <section id="how-to-play-screen" class="screen hidden">
+    <h2 style="color:var(--gold-bright);">How To Play</h2>
+    <div class="panel">
+      <ol>
+        <li><strong>Swipe the ball</strong> — drag from the ball and release toward the goal. Direction and speed of your swipe set the shot's power and curve.</li>
+        <li><strong>Hit the targets</strong> — moving gold rings appear inside the goal. Strike them to score.</li>
+        <li><strong>Centre targets</strong> are worth 100, <strong>corner targets</strong> 250, and the rare <strong>moving bonus target</strong> is worth 500.</li>
+        <li><strong>Chain shots quickly</strong> to build a streak bonus, and keep your accuracy high for an accuracy bonus at the end.</li>
+        <li>You have <strong>60 seconds</strong>. Score as much as you can before the timer runs out.</li>
+      </ol>
+    </div>
+    <button class="btn btn-ghost" data-nav="menu">Back</button>
+  </section>
+
+  <!-- ============ HIGH SCORES ============ -->
+  <section id="high-scores-screen" class="screen hidden">
+    <h2 style="color:var(--gold-bright);">High Scores</h2>
+    <div class="panel">
+      <table class="score-table" id="score-table-body"></table>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-ghost btn-small" id="btn-clear-scores">Clear Scores</button>
+      <button class="btn btn-ghost btn-small" data-nav="menu">Back</button>
+    </div>
+  </section>
+
+  <!-- ============ SETTINGS ============ -->
+  <section id="settings-screen" class="screen hidden">
+    <h2 style="color:var(--gold-bright);">Settings</h2>
+    <div class="panel">
+      <div class="setting-row">
+        <span class="label">Sound Effects</span>
+        <div class="toggle on" id="toggle-sfx"></div>
+      </div>
+      <div class="setting-row">
+        <span class="label">Background Music</span>
+        <div class="toggle" id="toggle-music"></div>
+      </div>
+      <div class="setting-row" style="flex-direction:column; align-items:flex-start; gap:10px;">
+        <span class="label">Difficulty</span>
+        <div class="diff-row" id="diff-row">
+          <div class="diff-pill" data-diff="easy">Easy</div>
+          <div class="diff-pill active" data-diff="normal">Normal</div>
+          <div class="diff-pill" data-diff="professional">Pro</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-ghost" data-nav="menu">Back</button>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about-screen" class="screen hidden">
+    <h2 style="color:var(--gold-bright);">About</h2>
+    <div class="panel">
+      <p style="color:var(--ink-dim); line-height:1.7; font-size:14.5px;">
+        Smart Design Football is a premium precision shooting challenge built around
+        one perfected experience: one stadium, one goal, sixty seconds, pure skill.
+      </p>
+      <p style="color:var(--ink-dim); line-height:1.7; font-size:14.5px;">
+        Designed and developed by Blake BMC. Version 1.0 — Production Development Blueprint.
+      </p>
+    </div>
+    <button class="btn btn-ghost" data-nav="menu">Back</button>
+  </section>
+
+  <!-- ============ GAME SCREEN ============ -->
+  <section id="game-screen" class="screen hidden">
+    <div class="hud">
+      <div class="hud-card timer" id="hud-timer"><div class="v" id="timer-val">60</div><div class="l">Time</div></div>
+      <div class="hud-card"><div class="v" id="score-val">0</div><div class="l">Score</div></div>
+      <div class="hud-buttons">
+        <div class="icon-btn" id="btn-pause" title="Pause">❚❚</div>
+        <div class="icon-btn" id="btn-mute" title="Mute">🔊</div>
+      </div>
+    </div>
+    <div id="stage-wrap">
+      <canvas id="stage"></canvas>
+    </div>
+    <div class="countdown-overlay hidden" id="countdown-overlay">3</div>
+    <div class="pause-overlay hidden" id="pause-overlay">
+      <h2 style="color:var(--gold-bright);">Paused</h2>
+      <button class="btn btn-primary" id="btn-resume">Resume</button>
+      <button class="btn btn-ghost" id="btn-quit-pause">Return Home</button>
+    </div>
+  </section>
+
+  <!-- ============ END GAME ============ -->
+  <section id="end-screen" class="screen hidden">
+    <div class="eyebrow" id="end-eyebrow">Final Whistle</div>
+    <div class="result-score" id="final-score">0</div>
+    <div class="result-sub">Final Score</div>
+    <div class="best-badge hidden" id="best-badge">New Best Score</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="v" id="stat-best">0</div><div class="l">Best</div></div>
+      <div class="stat-box"><div class="v" id="stat-accuracy">0%</div><div class="l">Accuracy</div></div>
+      <div class="stat-box"><div class="v" id="stat-streak">0</div><div class="l">Best Streak</div></div>
+    </div>
+    <div class="menu-stack">
+      <button class="btn btn-primary" id="btn-play-again">Play Again</button>
+      <button class="btn btn-ghost" id="btn-share">Share Score</button>
+      <button class="btn btn-ghost" data-nav="menu">Return Home</button>
+    </div>
+  </section>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
